@@ -1,0 +1,33 @@
+sudo apt-get install gpsd gpsd-clients
+
+Install U-Center UI:
+sudo apt-get install ser2net
+
+Edit the ser2net config and add the serial port redirect to a network port.
+We'll use port 6000.
+Add this line at the bottom:
+6000:raw:600:/dev/serial0:9600 NONE 1STOPBIT 8DATABITS XONXOFF LOCAL -RTSCTS
+
+This is the syntax for the line above:
+TCP Port:connection type:timeout:serial port:serial port speed:serial options
+
+
+Start with sudo ser2net.  Validate running with sudo netstat -ltnp | grep 6000
+
+maa
+After restart make sure gpsd is running:  sudo systemctl -l status gpsd
+
+To verify incoming gps information use: sudo gpsmon
+
+
+Now install axtools: sudo apt-get install axtools
+Now install direwolf: sudo apt-get install direwolf
+
+
+sudo apt-get install xastir
+
+After install it will give a desktop error "Invalid desktop entry file: '/usr/share/applications/xastir.desktop'", you will need to do:
+ls -lah /usr/bin/xastir
+Then you need to add yourself to the group xastir-ax25
+sudo usermod -a -G xastir-ax25 pi
+
