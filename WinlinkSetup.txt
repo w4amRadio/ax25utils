@@ -1,0 +1,182 @@
+Soundmodem for raspberry pi:
+https://www.cantab.net/users/john.wiseman/Documents/QtSoundModem.html
+	--> this has such old libraries that is no longer supported unless you find
+	qt5-default 
+	libqt5serialport5
+somewhere, so instead we need to use Direwolf.
+
+
+Soundmodem:
+Make sure your soundmodem device is plugged in through usb cable.
+
+
+Use alsamixer to set the sound levels (likely if the PTT doesn't activate it's because the levels are not above 70-80%)
+Direwolf will use VOX for PTT activation so this is important.
+(see https://www.kevinhooke.com/tag/raspberry-pi/)
+
+
+Direwolf:
+sudo apt-get install direwolf
+
+Make sure your signalink is connected to your pi by usb cable, then run:  arecord -l
+you should see something like this:
+**** List of CAPTURE Hardware Devices ****
+card 2: CODEC [USB AUDIO  CODEC], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+  
+also you can use: aplay -l
+which should show us something like this:
+**** List of PLAYBACK Hardware Devices ****
+card 0: Headphones [bcm2835 Headphones], device 0: bcm2835 Headphones [bcm2835 Headphones]
+  Subdevices: 8/8
+  Subdevice #0: subdevice #0
+  Subdevice #1: subdevice #1
+  Subdevice #2: subdevice #2
+  Subdevice #3: subdevice #3
+  Subdevice #4: subdevice #4
+  Subdevice #5: subdevice #5
+  Subdevice #6: subdevice #6
+  Subdevice #7: subdevice #7
+card 1: vc4hdmi [vc4-hdmi], device 0: MAI PCM i2s-hifi-0 [MAI PCM i2s-hifi-0]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 2: CODEC [USB AUDIO  CODEC], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+  
+So, we can see that our audio device should be 2,0
+
+Put direwolf config in root directory, assign call sign.
+
+(put audio device config)
+ADEVICE  plughw:2,0
+
+Now run:
+sudo addgroup direwolf audio
+
+
+sudo apt-get install libax25
+sudo apt-get install ax25-apps
+sudo apt-get install ax25-tools
+
+set the following in /etc/ax25/axports:
+
+# /etc/ax25/axports
+#1200 baud is used for signalink
+# name	callsign	speed	paclen	window	description
+ax0		KN4TEM-1	1200	255		7		2m packet radio
+
+
+Now run:
+sudo direwolf -t 0 -p
+
+we should now see something like the following:
+Dire Wolf version 1.6
+Includes optional support for:  gpsd hamlib cm108-ptt
+
+Reading config file direwolf.conf
+Audio device for both receive and transmit: plughw:1,0  (channel 0)
+Channel 0: 1200 baud, AFSK 1200 & 2200 Hz, E+, 44100 sample rate / 3.
+Note: PTT not configured for channel 0. (Ignore this if using VOX.)
+Ready to accept AGW client application 0 on port 8000 ...
+Ready to accept KISS TCP client application 0 on port 8001 ...
+Virtual KISS TNC is available on /dev/pts/2
+Created symlink /tmp/kisstnc -> /dev/pts/2
+
+Look for the last line in /dev/pts/
+
+(may need to run below line, does this work?)
+sudo kissparms -c 1 -p radio
+
+Now in another cli, run kissattach:
+sudo kissattach /dev/pts/3 ax0
+sudo kissattach /tmp/kisstnc wl2k
+
+
+(At the moment on this machine this is set to run on port 9001)
+
+download pat winlink from here:
+https://github.com/la5nta/pat/releases
+
+wget https://github.com/la5nta/pat/releases/download/v0.12.1/pat_0.12.1_linux_armhf.deb
+sudo dpkg -i pat_0.12.1_linux_armhf.deb
+
+configure pat winlink (should now be installed):
+pat configure
+pat http -> starts webserver
+
+set up as a service:
+sudo systemctl start pat@pi   (your system username instead of pi)
+sudo systemctl enable pat@pi
+
+to reconfigure pat-winlink use:
+cd ~/.config/pat
+sudo nano config.json
+or sudo nano ~/.config/pat/config.json
+
+--> set like this:
+
+"listen": [],
+  "hamlib_rigs": {},
+  "ax25": {
+    "port": "ax0",
+    "beacon": {
+      "every": 3600,
+      "message": "Winlink P2P",
+      "destination": "IDENT"
+    },
+    "rig": ""
+  },
+
+
+
+Emergency Email Server V1 (by KM4ACK) Installation:
+Install apache:
+sudo apt-get install apache2
+sudo apt-get install php7.3
+(git clone)
+sudo cp -r EES-LITE-master/* /var/www/html/
+sudo chmod +x firstrun
+sudo ./firstrun
+./schedule
+sudo nano config.php
+
+[pi-ip-addy]/email.php
+[pi-ip-addy]/reply-input.php
+
+
+
+
+
+
+
+
+
+
+
+
+Synopsis:
+
+http://localhost:9001/api/connect?url=ax25:///AK4ZX-12
+GET /api/connect?url=ax25:///AK4ZX-12 HTTP/1.1
+Host: localhost:9001
+Connection: keep-alive
+sec-ch-ua: "(Not(A:Brand";v="8", "Chromium";v="98"
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; CrOS armv7l 13597.84.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.106 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: http://localhost:9001/ui
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+
+
+Pat winlink:
+http://localhost:9001/ui#
+
+Emergency Email Server:
