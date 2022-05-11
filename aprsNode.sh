@@ -1,5 +1,4 @@
 #!/bin/bash
-#To be used with RPi-3 or higher
 #parameters are callsign, assignment
 
 #assignment is for aprs receiver station, operator, or digipeater
