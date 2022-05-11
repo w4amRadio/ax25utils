@@ -30,6 +30,27 @@ searchResult=$(find / -name "direwolf.conf")
 #set up direwolf to be run as a service, move direwolf.conf to expected location and alter config
 sed -i 's/YOURCALLSIGN/$(callsign)/g' direwolf.conf
 
+echo "[Unit]
+Description=Direwolf TNC
+Requires=
+After=
+
+[Service]
+Type=simple
+User=root
+#TODO: parse searchResult
+ExecStart=direwolf -t 0 -p -c direwolf.conf
+LimitNOFILE=6000000
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/direwolf.service
+
+systemctl daemon-reload
+systemctl enable direwolf
+
+echo "Starting direwolf...."
+systemctl start direwolf
+
 apt-get install -y xastir
 
 #user should typically be pi
