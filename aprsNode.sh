@@ -19,7 +19,7 @@ apt-get install -y direwolf
 addgroup direwolf audio
 
 #at this point the signalink device should be plugged in
-arecord -l | grep "CODEC [USB AUDIO  CODEC]"
+device = $(arecord -l | grep "CODEC [USB AUDIO  CODEC]")
 
 #set up direwolf to be run as a service, move direwolf.conf to expected location and alter config
 sed -i "s/YOURCALLSIGN/${callsign}/g" direwolf.conf
