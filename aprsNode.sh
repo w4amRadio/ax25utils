@@ -27,7 +27,14 @@ apt-get install -y axtools
 
 echo "ax0 ${callsign}-1 1200  255		7		2m packet radio" >> /etc/ax25/axports 
 
-apt-get install -y direwolf
+
+git clone https://www.github.com/wb2osz/direwolf
+mkdir ~/direwolf/build
+cmake ~/direwolf
+make ~/direwolf/build
+make install ~/direwolf/build
+make install-conf ~/direwolf/build
+
 addgroup direwolf audio
 
 #at this point the signalink device should be plugged in
