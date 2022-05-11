@@ -8,6 +8,14 @@ callsign=$1
 assignment=$2
 
 apt-get install -y curl
+apt-get install -y git
+apt-get install -y gcc
+apt-get install -y g++
+apt-get install -y make
+apt-get install -y cmake
+apt-get install -y libasound2-dev
+apt-get install -y libudev-dev
+
 apt-get install -y ser2net
 
 apt-get install -y gpsd gpsd-clients
