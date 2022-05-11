@@ -11,5 +11,6 @@ sudo apt-get install -y direwolf
 
 apt-get install -y xastir
 
+#user should typically be pi
 user=$(whoami)
 sudo usermod -a -G xastir-ax25 $user
