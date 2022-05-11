@@ -1,5 +1,8 @@
 #!/bin/bash
 #To be used with RPi-3 or higher
+#parameters are callsign, 
+
+callsign=$1
 
 apt-get install -y ser2net
 
@@ -10,7 +13,7 @@ apt-get install -y ax25-apps
 apt-get install -y ax25-tools
 apt-get install -y axtools
 
-echo "ax0		KN4TEM-1	1200	255		7		2m packet radio" >> /etc/ax25/axports 
+echo "ax0 ${callsign}-1 1200  255		7		2m packet radio" >> /etc/ax25/axports 
 
 apt-get install -y direwolf
 addgroup direwolf audio
