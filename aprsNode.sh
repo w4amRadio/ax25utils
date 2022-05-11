@@ -5,6 +5,9 @@ apt-get install -y ser2net
 
 apt-get install -y gpsd gpsd-clients
 
+apt-get install -y libax25
+apt-get install -y ax25-apps
+apt-get install -y ax25-tools
 apt-get install -y axtools
 
 apt-get install -y direwolf
