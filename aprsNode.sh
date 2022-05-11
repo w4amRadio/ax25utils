@@ -7,7 +7,7 @@ sudo apt-get install -y axtools
 
 sudo apt-get install -y direwolf
 
-#set up direwolf to be run as a service
+#set up direwolf to be run as a service, move direwolf.conf to expected location and alter config
 
 apt-get install -y xastir
 
