@@ -25,7 +25,7 @@ addgroup direwolf audio
 device = $(arecord -l | grep "CODEC [USB AUDIO  CODEC]")
 
 #set up direwolf to be run as a service, move direwolf.conf to expected location and alter config
-sed -i "s/YOURCALLSIGN/${callsign}/g" direwolf.conf
+sed -i 's/YOURCALLSIGN/$(callsign)/g' direwolf.conf
 
 apt-get install -y xastir
 
