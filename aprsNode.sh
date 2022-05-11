@@ -24,6 +24,9 @@ addgroup direwolf audio
 #at this point the signalink device should be plugged in
 device = $(arecord -l | grep "CODEC [USB AUDIO  CODEC]")
 
+#if a direwolf.conf is not already available then bring one down from our repo
+searchResult=$(find / -name "direwolf.conf")
+
 #set up direwolf to be run as a service, move direwolf.conf to expected location and alter config
 sed -i 's/YOURCALLSIGN/$(callsign)/g' direwolf.conf
 
