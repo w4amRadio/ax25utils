@@ -71,8 +71,10 @@ device = $(arecord -l | grep "CODEC [USB AUDIO  CODEC]")
 searchResult=$(find / -name "direwolf.conf")
 
 #set up direwolf to be run as a service, move direwolf.conf to expected location and alter config
+echo "Configuring direwolf.conf..." >> ~/tmp/installation.log 2>&1
 sed -i 's/YOURCALLSIGN/$(callsign)/g' direwolf.conf
 
+echo "Configuring direwolf service definition (/etc/systemd/system/direwolf.service) ..." >> ~/tmp/installation.log 2>&1
 echo "[Unit]
 Description=Direwolf TNC
 Requires=
@@ -88,12 +90,16 @@ LimitNOFILE=6000000
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/direwolf.service
 
+echo "Reloading Daemons..." >> ~/tmp/installation.log 2>&1
 systemctl daemon-reload
+
+echo "Enabling direwolf as a service..." >> ~/tmp/installation.log 2>&1
 systemctl enable direwolf
 
-echo "Starting direwolf...."
+echo "Starting direwolf service..." >> ~/tmp/installation.log 2>&1
 systemctl start direwolf
 
+echo "Installing Xastir..." >> ~/tmp/installation.log 2>&1
 apt-get install -y xastir
 
 #user should typically be pi
