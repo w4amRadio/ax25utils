@@ -1,8 +1,11 @@
 #!/bin/bash
 #To be used with RPi-3 or higher
-#parameters are callsign, 
+#parameters are callsign, assignment
+
+#assignment is for aprs receiver station, operator, or digipeater
 
 callsign=$1
+assignment=$2
 
 apt-get install -y ser2net
 
