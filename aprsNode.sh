@@ -7,6 +7,7 @@
 callsign=$1
 assignment=$2
 
+apt-get install -y curl
 apt-get install -y ser2net
 
 apt-get install -y gpsd gpsd-clients
