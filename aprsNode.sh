@@ -63,8 +63,28 @@ make /home/$user/direwolf/build
 make install /home/$user/direwolf/build
 make install-conf /home/$user/direwolf/build
 
-#pretty sure we should have a direwolf user to add to the audio group
-direwolfUser=$(less passwd | grep direwolf)
+
+#https://github.com/wb2osz/direwolf/blob/master/debian/direwolf.postinst
+add_group_if_missing() {
+    if ! getent group direwolf >/dev/null; then
+        addgroup --system --force-badname direwolf || true
+    fi
+}
+
+add_user_if_missing() {
+    if ! id -u direwolf > /dev/null 2>&1; then
+        mkdir -m 02750 -p /var/lib/direwolf
+        adduser --system --home /var/lib/direwolf \
+          --disabled-password \
+          --force-badname direwolf \
+          --ingroup direwolf
+        adduser direwolf dialout
+        chown direwolf:direwolf /var/lib/direwolf
+    fi
+}
+
+add_group_if_missing
+add_user_if_missing
 
 echo "Adding direwolf to group audio..." >> /home/$user/tmp/installation.log 2>&1
 addgroup direwolf audio
@@ -77,7 +97,7 @@ searchResult=$(find / -name "direwolf.conf")
 
 #set up direwolf to be run as a service, move direwolf.conf to expected location and alter config
 echo "Configuring direwolf.conf..." >> /home/$user/tmp/installation.log 2>&1
-sed -i 's/YOURCALLSIGN/$(callsign)/g' direwolf.conf
+sed -i 's/N0CALL/$(callsign)/g' direwolf.conf
 
 echo "Configuring direwolf service definition (/etc/systemd/system/direwolf.service) ..." >> /home/$user/tmp/installation.log 2>&1
 echo "[Unit]
