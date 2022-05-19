@@ -60,6 +60,9 @@ make /home/$user/direwolf/build
 make install /home/$user/direwolf/build
 make install-conf /home/$user/direwolf/build
 
+#pretty sure we should have a direwolf user to add to the audio group
+direwolfUser=$(less passwd | grep direwolf)
+
 echo "Adding direwolf to group audio..." >> /home/$user/tmp/installation.log 2>&1
 addgroup direwolf audio
 
