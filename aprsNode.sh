@@ -98,6 +98,9 @@ LimitNOFILE=6000000
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/direwolf.service
 
+#We'll likely need to move the direwolf.conf file to /etc/direwolf.conf
+mv /home/$user/direwolf.conf /etc/
+
 echo "Reloading Daemons..." >> /home/$user/tmp/installation.log 2>&1
 systemctl daemon-reload
 
