@@ -80,7 +80,7 @@ searchResult=$(find / -name "direwolf.conf")
 
 #set up direwolf to be run as a service, move direwolf.conf to expected location and alter config
 echo "Configuring direwolf.conf..." >> /home/$user/tmp/installation.log 2>&1
-sed -i 's/N0CALL/$(callsign)/g' direwolf.conf
+sed -i 's/N0CALL/$(callsign)/g' /home/$user/direwolf.conf
 
 echo "Configuring direwolf service definition (/etc/systemd/system/direwolf.service) ..." >> /home/$user/tmp/installation.log 2>&1
 echo "[Unit]
@@ -92,7 +92,7 @@ After=
 Type=simple
 User=root
 #TODO: parse searchResult
-ExecStart=direwolf -t 0 -c /etc/direwolf.conf
+ExecStart=direwolf -t 0 -c /etc/direwolf.conf | tee -a /home/$user/aprs_capture/raw_aprs_capture.log
 LimitNOFILE=6000000
 
 [Install]
