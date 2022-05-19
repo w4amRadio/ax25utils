@@ -65,28 +65,9 @@ make /home/$user/direwolf/build
 make install /home/$user/direwolf/build
 make install-conf /home/$user/direwolf/build
 
-
-#https://github.com/wb2osz/direwolf/blob/master/debian/direwolf.postinst
-add_group_if_missing() {
-    if ! getent group direwolf >/dev/null; then
-        addgroup --system --force-badname direwolf || true
-    fi
-}
-
-add_user_if_missing() {
-    if ! id -u direwolf > /dev/null 2>&1; then
-        mkdir -m 02750 -p /var/lib/direwolf
-        adduser --system --home /var/lib/direwolf \
-          --disabled-password \
-          --force-badname direwolf \
-          --ingroup direwolf
-        adduser direwolf dialout
-        chown direwolf:direwolf /var/lib/direwolf
-    fi
-}
-
-add_group_if_missing
-add_user_if_missing
+echo "Executing direwolf debian post-installation script..." >> /home/$user/tmp/installation.log 2>&1
+chmod +x /home/$user/direwolf/debian/direwolf.postinst
+bash /home/$user/direwolf/debian/direwolf.postinst
 
 echo "Adding direwolf to group audio..." >> /home/$user/tmp/installation.log 2>&1
 addgroup direwolf audio
