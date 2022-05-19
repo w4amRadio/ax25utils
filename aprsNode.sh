@@ -1,6 +1,8 @@
 #!/bin/bash
 #parameters are callsign, assignment
 
+set -e
+
 #assignment is for aprs receiver station, operator, or digipeater
 
 callsign=$1
