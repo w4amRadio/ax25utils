@@ -40,6 +40,9 @@ apt-get install -y ser2net
 echo "Installing gpsd and gpsd-clients..." >> /home/$user/tmp/installation.log 2>&1
 apt-get install -y gpsd gpsd-clients
 
+echo "Installing libgps-dev..." >> /home/$user/tmp/installation.log 2>&1
+apt-get install -y libgps-dev
+
 echo "Installing libax25..." >> /home/$user/tmp/installation.log 2>&1
 apt-get install -y libax25
 
