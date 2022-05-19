@@ -92,7 +92,7 @@ After=
 Type=simple
 User=root
 #TODO: parse searchResult
-ExecStart=direwolf -t 0 -c /home/$user/direwolf.conf
+ExecStart=direwolf -t 0 -c /etc/direwolf.conf
 LimitNOFILE=6000000
 
 [Install]
